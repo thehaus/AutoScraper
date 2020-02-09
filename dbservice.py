@@ -9,7 +9,7 @@ def initialize(databasetype):
         #invalid initialization, default to text
         dbtype = 'text'
 
-def writetodb(target,value):
+def write(target,value):
     global dbtype
     if dbtype=='':
         #if module was not initialized, default to text
@@ -17,7 +17,7 @@ def writetodb(target,value):
     if dbtype=='text':
         __writetotextdb(target,value)
 
-def readfromdb(source):
+def read(source):
     global dbtype
     if dbtype=='':
         #if module was not initialized, default to text
@@ -25,7 +25,7 @@ def readfromdb(source):
     if dbtype=='text':
         return __readfromtextdb(source)
 
-def existsindb(target,value):
+def exists(target,value):
     global dbtype
     if dbtype=='':
         #if module was not initialized, default to text
@@ -35,12 +35,13 @@ def existsindb(target,value):
     return False
 
 def __writetotextdb(target,value):
+    value = str(value)
     if not __existsintextdb(target,value):
-        with open('textdata/'+target,'a+',encoding='utf-8') as filewriter:
-            filewriter.write(value+'\n')
+        with open('textdata/'+target+'.txt','a+',encoding='utf-8') as filewriter:
+            filewriter.write('\n'+value)
 
 def __readfromtextdb(source):
-    with open('textdata/'+source,'r') as filereader:
+    with open('textdata/'+source+'.txt','r') as filereader:
         return filereader.read().splitlines()
 
 def __writetosqldb(target,value):
@@ -60,6 +61,7 @@ def __readfrommongodb(source):
     return False
 
 def __existsintextdb(target,value):
+    value = str(value)
     try:
         if value in __readfromtextdb(target):
             return True
